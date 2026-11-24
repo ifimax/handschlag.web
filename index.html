@@ -1,0 +1,565 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090e13">
+<title>HANDSHAKE — Daily Ritual</title>
+
+<style>
+:root {
+  --bg: #090e13;
+  --card: #111a22;
+  --green: #a3ff5f;
+  --cyan: #45e5e5;
+  --text: #f1f5f9;
+  --muted: #8997a5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+header {
+  padding: 25px 7%;
+  border-bottom: 1px solid #24313c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.logo span {
+  color: var(--green);
+}
+
+.tag {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 35px 20px;
+}
+
+.date {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+h1 {
+  font-size: clamp(30px, 6vw, 48px);
+  margin-bottom: 10px;
+}
+
+h1 span {
+  color: var(--green);
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 30px;
+}
+
+.daily-card {
+  background: linear-gradient(135deg, #14231d, #12202a);
+  border: 1px solid #35513c;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 25px;
+  position: relative;
+  overflow: hidden;
+}
+
+.daily-card::after {
+  content: "01";
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 90px;
+  font-weight: 900;
+  color: #ffffff08;
+}
+
+.badge {
+  color: var(--green);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.handshake-name {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.description {
+  color: #b6c5ce;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.step {
+  background: #ffffff0a;
+  border: 1px solid #ffffff12;
+  padding: 14px;
+  border-radius: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.step-number {
+  background: var(--green);
+  color: #101810;
+  min-width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: bold;
+  padding: 15px 20px;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.primary {
+  background: var(--green);
+  color: #101810;
+  width: 100%;
+}
+
+.secondary {
+  background: #202d38;
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.section-title {
+  font-size: 22px;
+  margin: 35px 0 15px;
+}
+
+.counter {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.item {
+  background: var(--card);
+  border: 1px solid #24313c;
+  border-radius: 12px;
+  padding: 17px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.item:hover {
+  border-color: var(--green);
+}
+
+.item strong {
+  display: block;
+  margin-bottom: 7px;
+}
+
+.item small {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+footer {
+  text-align: center;
+  padding: 40px 15px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media(max-width: 500px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .daily-card {
+    padding: 22px;
+  }
+
+  header {
+    padding: 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">HAND<span>SHAKE</span></div>
+  <div class="tag">DAILY RITUAL / 01</div>
+</header>
+
+<main>
+
+  <div class="date" id="date"></div>
+
+  <h1>Today's <span>Handshake.</span></h1>
+  <p class="subtitle">
+    Ein Tag. Ein Handschlag. Keine Wiederholung nötig.
+  </p>
+
+  <section class="daily-card">
+    <div class="badge">✦ HANDSHAKE OF THE DAY</div>
+
+    <div class="handshake-name" id="name">Lädt...</div>
+
+    <p class="description" id="description"></p>
+
+    <div class="steps" id="steps"></div>
+
+    <button class="primary" onclick="drawNew()">
+      ↻ Neu auslosen
+    </button>
+
+    <p style="color:#8997a5;font-size:11px;margin-top:12px">
+      Der Tages-Handschlag bleibt bis morgen gespeichert.
+    </p>
+  </section>
+
+  <h2 class="section-title">Alle Handschläge</h2>
+  <p class="counter">40 VARIANTEN · ZUM ANSEHEN UND AUSWÄHLEN</p>
+
+  <div class="grid" id="grid"></div>
+
+</main>
+
+<footer>
+  HANDSHAKE SYSTEM · MADE FOR TWO
+</footer>
+
+<script>
+
+const handshakes = [
+  ["Classic", "Der einfache Klassiker.",
+   ["Rechte Hände treffen sich.",
+    "Kurzer fester Händedruck.",
+    "Loslassen."]],
+
+  ["Double Tap", "Ein kleiner Twist zum Klassiker.",
+   ["Normaler Händedruck.",
+    "Mit der freien Hand kurz auf den Handrücken tippen."]],
+
+  ["Slide", "Ein flüssiger Übergang.",
+   ["Handflächen treffen sich.",
+    "Hände leicht nach vorne gleiten lassen.",
+    "Loslassen."]],
+
+  ["Fist Bump", "Kurz und unkompliziert.",
+   ["Fäuste treffen sich.",
+    "Kurz Kontakt halten.",
+    "Zurückziehen."]],
+
+  ["Snap", "Ein einfacher Rhythmus.",
+   ["Händedruck.",
+    "Loslassen.",
+    "Beide schnipsen gleichzeitig."]],
+
+  ["Up Down", "Eine kleine Bewegung.",
+   ["Händedruck.",
+    "Hände einmal nach oben bewegen.",
+    "Wieder lösen."]],
+
+  ["Double Fist", "Zwei kurze Fist Bumps.",
+   ["Rechte Fäuste treffen sich.",
+    "Linke Fäuste treffen sich."]],
+
+  ["Tap & Go", "Minimalistisch.",
+   ["Handflächen berühren sich.",
+    "Ein kurzer Tap.",
+    "Weitergehen."]],
+
+  ["The Switch", "Ein kleiner Seitenwechsel.",
+   ["Rechte Hände treffen sich.",
+    "Kurz lösen.",
+    "Linke Hände treffen sich."]],
+
+  ["Clap", "Ein gemeinsamer Klatscher.",
+   ["Beide klatschen gleichzeitig ab.",
+    "Hände wieder zurückziehen."]],
+
+  ["Double Clap", "Zwei schnelle Klatscher.",
+   ["Einmal abklatschen.",
+    "Direkt ein zweites Mal."]],
+
+  ["Low Five", "Die tiefere Variante.",
+   ["Hände unten zusammenführen.",
+    "Einmal abklatschen."]],
+
+  ["High Five", "Der Klassiker von oben.",
+   ["Hände nach oben.",
+    "Gleichzeitig abklatschen."]],
+
+  ["Fist & Palm", "Zwei verschiedene Kontakte.",
+   ["Fist Bump.",
+    "Danach Handflächen kurz zusammen."]],
+
+  ["Cross Tap", "Ein kurzer Wechsel.",
+   ["Rechte Hände treffen sich.",
+    "Linke Hände treffen sich."]],
+
+  ["Quick Shake", "Der schnelle Händedruck.",
+   ["Händedruck.",
+    "Einmal kurz schütteln.",
+    "Loslassen."]],
+
+  ["Palm Tap", "Ein einfacher Handflächen-Tap.",
+   ["Handflächen treffen sich.",
+    "Einmal kurz drücken.",
+    "Loslassen."]],
+
+  ["Double Five", "Zwei High Fives.",
+   ["Einmal rechts abklatschen.",
+    "Einmal links abklatschen."]],
+
+  ["Fist Roll", "Ein kleiner Übergang.",
+   ["Fist Bump.",
+    "Hände kurz drehen.",
+    "Loslassen."]],
+
+  ["The Pause", "Ein ruhiger Ablauf.",
+   ["Händedruck.",
+    "Eine Sekunde halten.",
+    "Loslassen."]],
+
+  ["Tap Twice", "Zwei kurze Kontakte.",
+   ["Einmal abklatschen.",
+    "Noch einmal kurz antippen."]],
+
+  ["Side Five", "Seitlich abklatschen.",
+   ["Beide Hände leicht zur Seite bewegen.",
+    "Abklatschen."]],
+
+  ["Fist Switch", "Ein einfacher Fäustetausch.",
+   ["Rechte Fäuste treffen sich.",
+    "Danach linke Fäuste."]],
+
+  ["The Point", "Mit einem kleinen Abschluss.",
+   ["Händedruck.",
+    "Loslassen.",
+    "Beide zeigen kurz nach vorne."]],
+
+  ["One Two", "Zwei Kontakte hintereinander.",
+   ["Fist Bump.",
+    "High Five."]],
+
+  ["Double Shake", "Zweimal schütteln.",
+   ["Händedruck.",
+    "Zweimal kurz schütteln.",
+    "Loslassen."]],
+
+  ["The Turn", "Eine kleine Drehbewegung.",
+   ["Handflächen treffen sich.",
+    "Hände leicht nach außen drehen.",
+    "Loslassen."]],
+
+  ["Reverse Five", "Ein umgekehrter Abschluss.",
+   ["High Five.",
+    "Fist Bump."]],
+
+  ["Tap Back", "Ein kurzer Abschluss.",
+   ["Händedruck.",
+    "Mit der freien Hand kurz auf den Rücken der eigenen Hand tippen."]],
+
+  ["Double Touch", "Zwei Handkontakte.",
+   ["Handflächen treffen sich.",
+    "Fäuste treffen sich."]],
+
+  ["The Reset", "Einfach und sauber.",
+   ["Fist Bump.",
+    "Hände zurücknehmen.",
+    "Noch ein kurzer Fist Bump."]],
+
+  ["Side Bump", "Ein seitlicher Fist Bump.",
+   ["Fäuste leicht seitlich zusammenführen.",
+    "Loslassen."]],
+
+  ["Palm & Fist", "Handfläche und Faust.",
+   ["High Five.",
+    "Fist Bump."]],
+
+  ["Quick Five", "Ein schneller High Five.",
+   ["Hände nach oben.",
+    "Einmal abklatschen.",
+    "Direkt lösen."]],
+
+  ["The Finish", "Ein kleiner gemeinsamer Abschluss.",
+   ["Fist Bump.",
+    "High Five.",
+    "Fertig."]],
+
+  ["Triple Tap", "Drei kurze Kontakte.",
+   ["High Five.",
+    "Fist Bump.",
+    "High Five."]],
+
+  ["Easy Shake", "Ein entspannter Händedruck.",
+   ["Hände treffen sich.",
+    "Einmal locker schütteln.",
+    "Loslassen."]],
+
+  ["Double Switch", "Zwei Seiten im Wechsel.",
+   ["Rechte Hände treffen sich.",
+    "Linke Hände treffen sich.",
+    "Ein kurzer Fist Bump."]],
+
+  ["Final Five", "Der einfache Abschluss.",
+   ["Fist Bump.",
+    "High Five.",
+    "Weiter geht's."]],
+
+  ["Combo", "Drei einfache Bewegungen.",
+   ["High Five.",
+    "Fist Bump.",
+    "Händedruck."]]
+];
+
+const today = new Date().toLocaleDateString("de-DE");
+
+let currentIndex = 0;
+
+function showHandshake(index) {
+  const h = handshakes[index];
+  currentIndex = index;
+
+  document.getElementById("name").textContent = h[0];
+  document.getElementById("description").textContent = h[1];
+
+  document.getElementById("steps").innerHTML =
+    h[2].map((step, i) => `
+      <div class="step">
+        <div class="step-number">${i + 1}</div>
+        <div>${step}</div>
+      </div>
+    `).join("");
+
+  document.querySelectorAll(".item").forEach((item, i) => {
+    item.style.borderColor =
+      i === index ? "var(--green)" : "#24313c";
+  });
+}
+
+function drawNew() {
+  let next;
+
+  do {
+    next = Math.floor(Math.random() * handshakes.length);
+  } while (next === currentIndex);
+
+  currentIndex = next;
+
+  showHandshake(next);
+
+  localStorage.setItem("handshakeIndex", next);
+  localStorage.setItem("handshakeDate", today);
+}
+
+function loadDaily() {
+  const savedDate = localStorage.getItem("handshakeDate");
+  const savedIndex = localStorage.getItem("handshakeIndex");
+
+  if (savedDate === today && savedIndex !== null) {
+    showHandshake(Number(savedIndex));
+  } else {
+    const random = Math.floor(Math.random() * handshakes.length);
+    currentIndex = random;
+    showHandshake(random);
+
+    localStorage.setItem("handshakeIndex", random);
+    localStorage.setItem("handshakeDate", today);
+  }
+}
+
+function buildGrid() {
+  const grid = document.getElementById("grid");
+
+  handshakes.forEach((h, i) => {
+    const item = document.createElement("div");
+    item.className = "item";
+
+    const title = document.createElement("strong");
+    title.textContent = `${String(i + 1).padStart(2, "0")} · ${h[0]}`;
+
+    const desc = document.createElement("small");
+    desc.textContent = h[1];
+
+    item.append(title, desc);
+
+    item.addEventListener("click", () => {
+      showHandshake(i);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    grid.appendChild(item);
+  });
+}
+
+document.getElementById("date").textContent =
+  new Date().toLocaleDateString("de-DE", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
+buildGrid();
+loadDaily();
+
+</script>
+</body>
+</html>
